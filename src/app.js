@@ -1,14 +1,17 @@
-const express = require('express')
-const cors = require('cors')
-require('dotenv').config()
+import express from 'express';
+import cors from 'cors';
+import 'dotenv/config';
+import authRoutes from './routes/authRoutes.js';
 
-const app = express()
+const app = express();
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
-app.get("/", (req, res)=>{
-    res.json({message: 'API funcionado '})
-})
+app.use('/auth', authRoutes);
 
-module.exports = app
+app.get('/', (req, res) => {
+  res.json({ message: 'API Página Virada funcionando!' });
+});
+
+export default app;
