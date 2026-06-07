@@ -14,7 +14,7 @@ const Reserva = sequelize.define('Reserva', {
   }
 });
 
-Reserva.belongsTo(Usuario, { foreignKey: 'usuarioId' });
-Reserva.belongsTo(Livro, { foreignKey: 'livroId' });
+Reserva.belongsTo(Usuario, { foreignKey: 'usuarioId', as: 'usuario' });
+Reserva.belongsTo(Livro, { foreignKey: 'livroId', as: 'livro' });
 
 export default Reserva;
