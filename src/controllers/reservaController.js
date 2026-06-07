@@ -59,23 +59,26 @@ const reservaController = {
 
     async cancelar(req, res) {
     try {
-      const reserva = await Reserva.findByPk(req.params.id);
-      if (!reserva) {
-        return res.status(404).json({ erro: "Reserva não encontrada" });
-      }
-      if (reserva.usuarioId !== req.usuario.id && req.usuario.tipo !== 'admin') {
-        return res.status(403).json({ erro: "Sem permissão para cancelar esta reserva" });
-      }
+        const reserva = await Reserva.findByPk(req.params.id);
+        if (!reserva) {
+            return res.status(404).json({ erro: "Reserva não encontrada" });
+        }
+        if (reserva.usuarioId !== req.usuario.id && req.usuario.tipo !== 'admin') {
+            return res.status(403).json({ erro: "Sem permissão para cancelar esta reserva" });
+        }
 
-      const livro = await Livro.findByPk(reserva.livroId);
-      await livro.update({ estoque: livro.estoque + 1 });
-      await reserva.update({ status: "cancelada" });
+        const livro = await Livro.findByPk(reserva.livroId);
+        if (livro) {
+            await livro.update({ estoque: livro.estoque + 1 });
+        }
 
-      return res.json({ mensagem: "Reserva cancelada com sucesso" });
+        await reserva.update({ status: "cancelada" });
+
+        return res.json({ mensagem: "Reserva cancelada com sucesso" });
     } catch (err) {
-      return res.status(500).json({ erro: err.message });
+        return res.status(500).json({ erro: err.message });
     }
-  }
+}
 };
 
 export default reservaController;
